@@ -35,7 +35,7 @@ const AlbumTab = ({ onSelectTab }) => {
         {thumbTabName.map((item, index) => (
           <li key={index} onClick={() => handleTabClick(item)}>
             <p>{item}</p>
-            <div className='tabName' />
+            <div className={`tabName ${onSelectTab === item ? 'hover' : ''}`} />
             <img src={tabBackground[index]} alt={item} />
           </li> 
         ))}

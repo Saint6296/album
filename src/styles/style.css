@@ -78,11 +78,8 @@
                 z-index: 999;
             }
 
-            .albumTabs ul li .tabName:hover {
-                opacity: 0.8;
-            }
 
-            .albumTabs ul li.tabName:active {
+            .albumTabs ul li .tabName:hover {
                 opacity: 0.8;    
             }
 
@@ -106,6 +103,17 @@
 .albumList {
     padding: 150pt 10pt 0 10pt;
 }
+
+   .albumList .image-container {
+    width: 100%;
+     max-width: 150pt;
+     margin: 0;  
+   }
+
+   .albumList .image-container .thumbnail-canvas {
+    width: 100%; /* 使canvas宽度自适应 */
+    height: auto; /* 高度自适应 */
+  }
 .image-gallery {
     column-count: 3; /* 设置列数 */
     column-gap: 4px; /* 设置列间距 */
@@ -116,3 +124,74 @@
     break-inside: avoid; /* 防止图片在列中被截断 */
     }
           
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    }
+    
+    .modal-content {
+        position: relative;
+        padding: 0;
+        margin: 20pt;
+        border-radius: 10pt;
+        max-width: 85%;
+        max-height: 85%;
+        overflow: hidden;
+    }
+    
+    .modal-image {
+        display: block;
+        max-width: 100%;
+        max-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .modal-buttons {
+        margin: auto;
+        position: absolute;
+        display: flex;
+        justify-content: space-evenly;
+        left: 0;
+        right: 0;
+        bottom: 20pt;
+    }
+    
+    .download-button {
+        width: 40%;
+        background-color: #007bff;
+        opacity: 0.9;
+        color: white;
+        border: none;
+        border-radius: 5pt;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .download-button a {
+        color: white;
+        text-decoration: none;
+    }
+    
+    .close-button {
+        padding: 10px;
+        width: 40%;
+        background-color: #dc3545;
+        opacity: 0.9;
+        color: white;
+        border: none;
+        border-radius: 5pt;
+        cursor: pointer;
+        font-weight: bold;
+    }

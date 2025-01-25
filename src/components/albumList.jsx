@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ImageModal from './ImageModal'; // 导入模态框组件
 
 // 预先导入所有可能的图像
 const importAll = (r) => {
@@ -11,9 +12,12 @@ const importAll = (r) => {
 const images = importAll(require.context('../assets/images/thumb', true, /\.(png|jpe?g|svg)$/));
 
 const AlbumList = ({ selectedItem }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+
   // 设置默认文件夹
   const defaultFolder = '春节';
-  const folderToLoad = selectedItem || defaultFolder; // 如果没有选中项，则使用默认文件夹
+  const folderToLoad = selectedItem || defaultFolder;
 
   // 获取对应文件夹的图像
   const folderImages = Object.keys(images).filter(image => image.includes(folderToLoad));
@@ -22,17 +26,45 @@ const AlbumList = ({ selectedItem }) => {
     caption: `Slide ${index + 1}`
   }));
 
+  const openModal = (imageUrl) => {
+    setCurrentImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentImage(null);
+  };
+
   return (
     <div className="albumList">
       <div className="image-gallery">
         {imageList.length > 0 ? (
           imageList.map((image, index) => (
-            <img key={index} src={image.url} alt={image.caption} />
+            <div key={index} className="image-container" onClick={() => openModal(image.url)}>
+              <canvas id={`canvas-${index}`} className='thumbnail-canvas' />
+              <img 
+                src={image.url} 
+                alt={image.caption} 
+                onLoad={(e) => {
+                  const canvas = document.getElementById(`canvas-${index}`);
+                  const ctx = canvas.getContext('2d');
+                  const img = e.target;
+
+                  const scale = 150 / img.width; // 设置缩略图宽度为150px
+                  canvas.width = 150;
+                  canvas.height = img.height * scale;
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }} 
+                style={{ display: 'none' }} // 隐藏原图
+              />
+            </div>
           ))
         ) : (
-          <p>没有找到相关图片。</p> // 如果没有图片，显示提示信息
+          <p>没有找到相关图片。</p>
         )}
       </div>
+      <ImageModal isOpen={isModalOpen} onClose={closeModal} imageUrl={currentImage} />
     </div>
   );
 };
