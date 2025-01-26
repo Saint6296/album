@@ -1,42 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/style.css';
 import thumbTabName from '../pathSettings.js';
 
-// 预先导入所有图像
-const importAll = (r) => {
-  let images = {};
-  r.keys().forEach((item) => { images[item.replace('./', '')] = r(item); });
-  return images;
-};
-
-// 导入所有子文件夹中的图像
-const images = importAll(require.context('../assets/images/thumb', true, /\.(png|jpe?g|svg|webp)$/));
-
-const AlbumTab = ({ onSelectTab }) => {
-  const [tabBackground, setTabBackground] = useState([]);
+const AlbumTab = ({ onSelectTab, selectedItem }) => {
+  const [highlightPosition, setHighlightPosition] = useState(0); // 管理高亮位置
+  const highlightRef = useRef(null); // 引用高亮元素
 
   useEffect(() => {
-    const imageList = thumbTabName.map((tabName) => {
-      // 获取对应子文件夹的第一张图
-      const folderImages = Object.keys(images).filter(image => image.includes(tabName));
-      return folderImages.length > 0 ? images[folderImages[0]] : null; // 取第一张图
-    });
-    setTabBackground(imageList);
-  }, []); // 添加依赖项数组
+    // 在组件加载时设置高亮位置
+    const activeTab = document.querySelector('.tabName.active');
+    if (activeTab) {
+      setHighlightPosition(activeTab.offsetLeft);
+    } else if (thumbTabName.length > 0) {
+      // 如果没有活动标签，默认选择第一个标签
+      const firstTab = document.querySelector('.tabName');
+      if (firstTab) {
+        setHighlightPosition(firstTab.offsetLeft);
+      }
+    }
+  }, []);
 
-  const handleTabClick = (item) => {
-    console.log(`Clicked tab: ${item}`);
+  const handleTabClick = (item, index) => {
     onSelectTab(item); // 调用传入的函数
+    const tab = document.querySelector(`.tabName:nth-child(${index + 1})`);
+    if (tab) {
+      highlightRef.current.style.width = `${tab.offsetWidth}px`;
+      highlightRef.current.style.transform = `translateX(${tab.offsetLeft}px)`;
+    }
   };
 
   return (
     <div className='albumTabs'>
+      <div 
+        className='tabHighlight' 
+        ref={highlightRef} 
+        style={{ 
+          left: `${highlightPosition}px`, // 使用 highlightPosition 更新位置
+          width: highlightRef.current ? `${highlightRef.current.offsetWidth}px` : '143px' // 确保宽度正确
+        }} 
+      />
       <ul>
         {thumbTabName.map((item, index) => (
-          <li key={index} onClick={() => handleTabClick(item)}>
-            <p>{item}</p>
-            <div className={`tabName ${onSelectTab === item ? 'hover' : ''}`} />
-            <img src={tabBackground[index]} alt={item} />
+          <li 
+            key={index} 
+            onClick={() => handleTabClick(item, index)} 
+            className={`tabName ${selectedItem === item ? 'active' : ''}`} // 根据 selectedItem 设置 active 类
+          >
+            {item}
           </li> 
         ))}
       </ul>

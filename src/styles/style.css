@@ -40,68 +40,41 @@
 }
 
 .albumTabs {
-    align-content: center;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 10px;
+}
+
+.tabHighlight {
     position: absolute;
-    width: 100%;
+    bottom: 0;
+    height: 4px;
+    background-color: #007bff;
+    transition: transform 0.3s ease, width 0.3s ease;
 }
 
     .albumTabs ul {
-        display: flex;
-        justify-content: space-between;
-        margin: 0;
+        list-style-type: none;
         padding: 0;
-        white-space: nowrap;
-        width: 100%;
-        text-align: center;
-        line-height: 60pt;
-        color: #fff;
-        overflow: auto;
-        box-shadow: rgba(0, 0, 0, 0.3) 0 4px 10px;
-        overflow: hidden;
+        display: flex;
+        width: 100vw;
+        margin: 0;
+        height: 40pt;
     }
 
-        .albumTabs ul li{
-            flex: 1;
-            height: 140pt;
-            list-style-type: none;
-            display: inline-block;
-            align-items: end;
+    .albumTabs li {
+        cursor: pointer;
+        transition: color 0.3s;
+        width: 33.3333%;
+        text-align: center;
+        align-content: center;
+    }
+
+        .albumTabs li.active {
+            color: #007bff;
         }
 
-            .albumTabs ul li .tabName{
-                position: absolute;
-                margin: auto;
-                background-color: red;
-                opacity: 0.4;
-                width: 33.333vw;
-                height: 140pt;
-                z-index: 999;
-            }
-
-
-            .albumTabs ul li .tabName:hover {
-                opacity: 0.8;    
-            }
-
-            .albumTabs ul li p {
-                position: absolute;
-                line-height: 140pt;
-                font-size: 14pt;
-                font-weight: bold;
-                padding: 0;
-                margin: 0;
-                width: 33.333vw;
-                z-index: 1000;
-                pointer-events: none;
-            }
-
-            .albumTabs ul li img {
-                width: 100%;
-                position: relative;
-            }
-        
 .albumList {
-    padding: 150pt 10pt 0 10pt;
+    padding: 10pt 10pt 0 10pt;
 }
 
    .albumList .image-container {
